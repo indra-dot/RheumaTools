@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rheumatools - Aplikasi Reumatologi Lengkap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" xintegrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .sidebar { transition: transform 0.3s ease-in-out; }
+        .nav-link.active { background-color: #f0fdfa; color: #14b8a6; font-weight: 600; }
+        .nav-link.active i { color: #14b8a6; }
+        .calculator-card { background-color: white; border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); padding: 1.5rem; display: flex; flex-direction: column; height: 100%; }
+        .calculator-card-content { flex-grow: 1; }
+        .result-box { border-radius: 0.5rem; padding: 1rem; margin-top: 1rem; font-size: 1.125rem; font-weight: 600; text-align: center; transition: all 0.3s ease; }
+        .reference { font-size: 0.75rem; color: #9ca3af; text-align: right; margin-top: 1rem; border-top: 1px solid #e5e7eb; padding-top: 0.5rem; }
+        .checklist-scroll::-webkit-scrollbar { width: 6px; }
+        .checklist-scroll::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .checklist-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        .checklist-scroll::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <aside id="sidebar" class="bg-white text-gray-800 w-72 flex-shrink-0 flex flex-col justify-between py-7 px-4 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-200 ease-in-out z-30 shadow-lg">
+        <div>
+            <a href="#" class="text-teal-600 flex items-center space-x-3 px-2">
+                <i class="fas fa-stethoscope text-3xl"></i>
+                <span class="text-2xl font-extrabold">RheumaTools</span>
+            </a>
+            <nav class="space-y-2 mt-10">
+                <div>
+                    <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Alat Bantu</p>
+                    <a href="#" class="flex items-center space-x-3 text-gray-700 p-3 rounded-lg hover:bg-gray-100 nav-link" data-page="diag-approach">
+                        <i class="fas fa-sitemap w-5 text-center text-gray-500"></i><span>Pendekatan Diagnosis Nyeri Sendi</span>
+                    </a>
+                </div>
+                <div class="pt-4">
+                    <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Kalkulator Penyakit</p>
+                    <a href="#" class="flex items-center space-x-3 text-gray-700 p-3 rounded-lg hover:bg-gray-100 nav-link active" data-page="ra">
+                        <i class="fas fa-bone w-5 text-center text-gray-500"></i><span>Rheumatoid Arthritis</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 text-gray-700 p-3 rounded-lg hover:bg-gray-100 nav-link" data-page="sle">
+                        <i class="fas fa-dna w-5 text-center text-gray-500"></i><span>Systemic Lupus Eritematosus (SLE)</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 text-gray-700 p-3 rounded-lg hover:bg-gray-100 nav-link" data-page="psa">
+                        <i class="fas fa-link w-5 text-center text-gray-500"></i><span>Psoriatic Arthritis</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 text-gray-700 p-3 rounded-lg hover:bg-gray-100 nav-link" data-page="as">
+                        <i class="fas fa-fire w-5 text-center text-gray-500"></i><span>Ankylosing Spondylitis</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 text-gray-700 p-3 rounded-lg hover:bg-gray-100 nav-link" data-page="ssc">
+                        <i class="fas fa-gem w-5 text-center text-gray-500"></i><span>Systemic Sclerosis</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 text-gray-700 p-3 rounded-lg hover:bg-gray-100 nav-link" data-page="gout">
+                        <i class="fas fa-droplet w-5 text-center text-gray-500"></i><span>Gout</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+        <nav>
+             <a href="#" class="flex items-center space-x-3 text-gray-700 p-3 rounded-lg hover:bg-gray-100 nav-link" data-page="references">
+                <i class="fas fa-book-open w-5 text-center text-gray-500"></i><span>Referensi</span>
+            </a>
+        </nav>
+    </aside>
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <header class="flex justify-between items-center p-4 bg-white border-b border-gray-100 shadow-sm flex-shrink-0">
+            <div class="flex items-center">
+                 <button id="menu-btn" class="text-gray-600 md:hidden mr-4"><i class="fas fa-bars text-xl"></i></button>
+                <h1 id="main-title" class="text-xl md:text-2xl font-bold text-gray-800">Kalkulator Rheumatoid Arthritis</h1>
+            </div>
+            <img src="https://placehold.co/40x40/afe3e0/333333?text=DA" alt="User Avatar" class="w-10 h-10 rounded-full">
+        </header>
+
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6 md:p-8">
+            <div id="content-container" class="max-w-7xl mx-auto">
+                
+                <!-- Pages are here, hidden by default -->
+
+                <div id="diag-approach-page" class="content-page hidden">
+                     <div class="calculator-card max-w-2xl mx-auto">
+                        <h2 class="text-2xl font-bold text-center mb-6">Algoritma Diagnosis Interaktif</h2>
+                        <div id="diag-steps-container">
+                            <div id="step-trauma" class="text-center"><p class="text-lg mb-4">Apakah terdapat riwayat trauma akut?</p><div class="flex justify-center gap-4"><button class="diag-btn bg-red-500 text-white px-6 py-2 rounded-lg" data-result="Strain/Sprain, Fraktur, Robekan">Ya</button><button class="diag-btn bg-blue-500 text-white px-6 py-2 rounded-lg" data-next-step="step-articular">Tidak</button></div></div>
+                            <div id="step-articular" class="text-center hidden"><p class="text-lg mb-4">Apakah keluhan berasal dari sendi (Artikular) atau luar sendi (Non-Artikular)?</p><div class="flex justify-center gap-4"><button class="diag-btn bg-blue-500 text-white px-6 py-2 rounded-lg" data-next-step="step-duration">Artikular</button><button class="diag-btn bg-red-500 text-white px-6 py-2 rounded-lg" data-result="Fibromialgia, Polimialgia Reumatika, Bursitis, Tendinitis, Miopati/Miositis, Entesitis">Non-Artikular</button></div></div>
+                            <div id="step-duration" class="text-center hidden"><p class="text-lg mb-4">Apakah durasi keluhan Akut (&lt;6 minggu) atau Kronis (≥6 minggu)?</p><div class="flex justify-center gap-4"><button class="diag-btn bg-blue-500 text-white px-6 py-2 rounded-lg" data-next-step="step-inflammation-acute">Akut</button><button class="diag-btn bg-blue-500 text-white px-6 py-2 rounded-lg" data-next-step="step-inflammation-chronic">Kronis</button></div></div>
+                            <div id="step-inflammation-acute" class="text-center hidden"><p class="text-lg mb-4">Apakah terdapat tanda inflamasi?</p><div class="flex justify-center gap-4"><button class="diag-btn bg-blue-500 text-white px-6 py-2 rounded-lg" data-next-step="step-joint-count-acute">Ya</button><button class="diag-btn bg-red-500 text-white px-6 py-2 rounded-lg" data-result="Artropati Non-Inflamasi Akut (Hemartrosis)">Tidak</button></div></div>
+                            <div id="step-inflammation-chronic" class="text-center hidden"><p class="text-lg mb-4">Apakah terdapat tanda inflamasi?</p><div class="flex justify-center gap-4"><button class="diag-btn bg-blue-500 text-white px-6 py-2 rounded-lg" data-next-step="step-joint-count-chronic">Ya</button><button class="diag-btn bg-red-500 text-white px-6 py-2 rounded-lg" data-result="Artropati Non-Inflamasi Kronis (Osteoartritis, Osteonekrosis, Charcot artropati, Hemokromatosis)">Tidak</button></div></div>
+                            <div id="step-joint-count-acute" class="text-center hidden"><p class="text-lg mb-4">Berapa jumlah sendi yang terlibat?</p><div class="flex justify-center gap-4"><button class="diag-btn bg-red-500 text-white px-6 py-2 rounded-lg" data-result="Mono/Oligoartritis Akut (Artritis Septik, Gout, Pseudogout, Artritis Reaktif)">1-4 Sendi</button><button class="diag-btn bg-red-500 text-white px-6 py-2 rounded-lg" data-result="Poliartritis Akut (Artritis Viral, Demam Reumatik Akut, Artritis Psoriatik, Artritis Enteropatik)">>4 Sendi</button></div></div>
+                            <div id="step-joint-count-chronic" class="text-center hidden"><p class="text-lg mb-4">Berapa jumlah sendi yang terlibat?</p><div class="flex justify-center gap-4"><button class="diag-btn bg-red-500 text-white px-6 py-2 rounded-lg" data-result="Mono/Oligoartritis Kronis (Artritis TB/Fungal, Artritis Psoriatik, Spondiloartropati, Vaskulitis, Gout/Pseudogout, Sarkoidosis)">1-4 Sendi</button><button class="diag-btn bg-red-500 text-white px-6 py-2 rounded-lg" data-result="Poliartritis Kronis (Artritis Reumatoid, LES, Skleroderma, MCTD)">>4 Sendi</button></div></div>
+                        </div>
+                        <div id="diag-result-container" class="text-center hidden"><p class="text-lg font-medium mb-2">Hasil Kemungkinan Diagnosis:</p><div id="diag-result-box" class="result-box bg-green-100 text-green-800"></div><button id="reset-diag-btn" class="mt-6 bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700">Mulai Lagi</button></div>
+                        <div class="mt-8"><div class="bg-white rounded-lg shadow-sm border border-gray-200"><button id="toggle-definitions" class="w-full flex justify-between items-center text-left p-4 font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none"><span>Lihat Keterangan & Definisi</span><i class="fas fa-chevron-down transition-transform duration-300"></i></button><div id="definitions-content" class="hidden p-4 border-t border-gray-200 text-sm text-gray-600 space-y-4"><h4 class="font-bold">Membedakan Nyeri Artikular dan Non-Artikular</h4><table class="w-full border-collapse border border-gray-300 text-left"><thead><tr class="bg-gray-100"><th class="border p-2">Gambaran Klinis</th><th class="border p-2">Artikular</th><th class="border p-2">Non-Artikular</th></tr></thead><tbody><tr><td class="border p-2 font-semibold">Lingkup Gerak Sendi</td><td class="border p-2">Terbatas, kurang lebih sama pada semua gerakan</td><td class="border p-2">Terbatas, tetapi tidak simetris</td></tr><tr><td class="border p-2 font-semibold">Gerakan Aktif/Pasif</td><td class="border p-2">Terbatas pada gerakan aktif kurang lebih sama dengan gerakan pasif</td><td class="border p-2">Keterbatasan dalam gerakan aktif tidak sesuai dengan pada gerakan pasif</td></tr><tr><td class="border p-2 font-semibold">Nyeri Tekan</td><td class="border p-2">Pada sendi (joint line)</td><td class="border p-2">Pada area sekitar sendi (periartikular)</td></tr><tr><td class="border p-2 font-semibold">Bengkak</td><td class="border p-2">Menyeluruh (Diffuse)</td><td class="border p-2">Terbatas (Localized)</td></tr></tbody></table><h4 class="font-bold mt-4">Membedakan Kondisi Inflamasi dan Non-Inflamasi</h4><table class="w-full border-collapse border border-gray-300 text-left"><thead><tr class="bg-gray-100"><th class="border p-2">Pemeriksaan</th><th class="border p-2">Inflamasi Artikular</th><th class="border p-2">Non-Inflamasi Artikular</th></tr></thead><tbody><tr><td class="border p-2 font-semibold">Hangat</td><td class="border p-2">Ya, merata di seluruh sendi</td><td class="border p-2">Tidak</td></tr><tr><td class="border p-2 font-semibold">Bengkak</td><td class="border p-2">Ya, biasanya sendi bengkak menyeluruh (efusi)</td><td class="border p-2">Tidak ada efusi, mungkin terdapat pembesaran tulang</td></tr><tr><td class="border p-2 font-semibold">Kemerahan</td><td class="border p-2">Jarang, jika ada seluruh sendi merah</td><td class="border p-2">Tidak</td></tr></tbody></table><p class="mt-2"><strong>Kekakuan Pagi:</strong> Inflamasi (>30 menit), Non-inflamasi (&lt;30 menit).</p><p><strong>Pola Keterlibatan Sendi:</strong> Aditif (bertambah, cth: AR), Migratori (berpindah, cth: Demam Reumatik), Intermiten (episode berbeda, cth: Gout).</p></div></div></div>
+                    </div>
+                </div>
+
+                <div id="ra-page" class="content-page">
+                    <div class="space-y-8"><div class="grid grid-cols-1 lg:grid-cols-2 gap-8"><div class="calculator-card"><div class="calculator-card-content"><h3 class="text-xl font-bold text-gray-800 mb-1">Kriteria Diagnosis (ACR/EULAR 2010)</h3><p class="text-gray-500 mb-4">Skor ≥6 mengklasifikasikan sebagai RA definit.</p><div class="space-y-4"><div><label class="font-medium">A. Keterlibatan Sendi</label><select id="ra-joint" class="ra-criteria w-full mt-1 p-2 border rounded-md"><option value="0">1 sendi besar</option><option value="1">2-10 sendi besar</option><option value="2">1-3 sendi kecil</option><option value="3">4-10 sendi kecil</option><option value="5">>10 sendi (min. 1 sendi kecil)</option></select></div><div><label class="font-medium">B. Serologi</label><select id="ra-serology" class="ra-criteria w-full mt-1 p-2 border rounded-md"><option value="0">RF Negatif DAN ACPA Negatif</option><option value="2">RF Positif Rendah ATAU ACPA Positif Rendah</option><option value="3">RF Positif Tinggi ATAU ACPA Positif Tinggi</option></select></div><div><label class="font-medium">C. Reaktan Fase Akut</label><select id="ra-apr" class="ra-criteria w-full mt-1 p-2 border rounded-md"><option value="0">CRP Normal DAN LED Normal</option><option value="1">CRP Abnormal ATAU LED Abnormal</option></select></div><div><label class="font-medium">D. Durasi Gejala</label><select id="ra-duration" class="ra-criteria w-full mt-1 p-2 border rounded-md"><option value="0">&lt; 6 Minggu</option><option value="1">≥ 6 Minggu</option></select></div></div><button id="calculate-ra-acr" class="w-full mt-6 bg-teal-500 text-white py-2 rounded-lg hover:bg-teal-600">Hitung Skor</button><div id="ra-acr-result" class="result-box hidden"></div></div><div class="reference"><i>Referensi: Buku Saku Reumatologi IRA 2020, Kriteria ACR/EULAR 2010</i></div></div><div class="calculator-card"><div class="calculator-card-content"><h3 class="text-xl font-bold text-gray-800 mb-1">Skor Aktivitas Penyakit (DAS28-CRP)</h3><p class="text-gray-500 mb-4">Disease Activity Score 28 using CRP.</p><div class="space-y-3"><div><label class="font-medium">Jumlah Sendi Nyeri (0-28)</label><input type="number" id="ra-tjc" class="w-full mt-1 p-2 border rounded-md" placeholder="0-28"></div><div><label class="font-medium">Jumlah Sendi Bengkak (0-28)</label><input type="number" id="ra-sjc" class="w-full mt-1 p-2 border rounded-md" placeholder="0-28"></div><div><label class="font-medium">CRP (mg/L)</label><input type="number" id="ra-crp" class="w-full mt-1 p-2 border rounded-md" placeholder="e.g., 15"></div><div><label class="font-medium">Penilaian Global Pasien (0-100 mm)</label><input type="number" id="ra-pga" class="w-full mt-1 p-2 border rounded-md" placeholder="0-100"></div></div><button id="calculate-ra-das28" class="w-full mt-6 bg-teal-500 text-white py-2 rounded-lg hover:bg-teal-600">Hitung Skor</button><div id="ra-das28-result" class="result-box hidden"></div></div><div class="reference"><i>Referensi: Formula DAS28-CRP standar</i></div></div></div></div>
+                </div>
+
+                <div id="sle-page" class="content-page hidden">
+                    <div class="space-y-8"><div class="grid grid-cols-1 lg:grid-cols-2 gap-8"><div class="calculator-card"><div class="calculator-card-content"><h3 class="text-xl font-bold text-gray-800 mb-1">Kriteria Diagnosis (ACR/EULAR 2019)</h3><p class="text-gray-500 mb-4">Prasyarat: ANA ≥1:80. Skor ≥10 mengklasifikasikan sebagai SLE.</p><div class="space-y-3 h-[450px] overflow-y-auto checklist-scroll pr-2"><div class="p-2 bg-gray-50 rounded-md"><label class="font-bold block">Konstitusional</label><div class="pl-2"><label><input type="checkbox" data-score="2" class="sle-acr-item h-4 w-4 mr-2">Demam (2)</label></div></div><div class="p-2 bg-gray-50 rounded-md"><label class="font-bold block">Muskuloskeletal</label><div class="pl-2"><label><input type="checkbox" data-score="6" class="sle-acr-item h-4 w-4 mr-2">Keterlibatan Sendi (6)</label></div></div><div class="p-2 bg-gray-50 rounded-md"><label class="font-bold block">Hematologi</label><div class="pl-2"><label><input type="radio" name="sle-hematology" data-score="3" class="sle-acr-radio h-4 w-4 mr-2">Leukopenia (3)</label><br><label><input type="radio" name="sle-hematology" data-score="4" class="sle-acr-radio h-4 w-4 mr-2">Trombositopenia (4)</label><br><label><input type="radio" name="sle-hematology" data-score="4" class="sle-acr-radio h-4 w-4 mr-2">Hemolisis Autoimun (4)</label></div></div><div class="p-2 bg-gray-50 rounded-md"><label class="font-bold block">Neuropsikiatri</label><div class="pl-2"><label><input type="radio" name="sle-neuro" data-score="2" class="sle-acr-radio h-4 w-4 mr-2">Delirium (2)</label><br><label><input type="radio" name="sle-neuro" data-score="3" class="sle-acr-radio h-4 w-4 mr-2">Psikosis (3)</label><br><label><input type="radio" name="sle-neuro" data-score="5" class="sle-acr-radio h-4 w-4 mr-2">Kejang (5)</label></div></div><div class="p-2 bg-gray-50 rounded-md"><label class="font-bold block">Mukokutan</label><div class="pl-2"><label><input type="radio" name="sle-skin" data-score="2" class="sle-acr-radio h-4 w-4 mr-2">Non-scarring Alopecia (2)</label><br><label><input type="radio" name="sle-skin" data-score="2" class="sle-acr-radio h-4 w-4 mr-2">Ulkus Oral (2)</label><br><label><input type="radio" name="sle-skin" data-score="4" class="sle-acr-radio h-4 w-4 mr-2">Lupus Kutan Subakut/Diskoid (4)</label><br><label><input type="radio" name="sle-skin" data-score="6" class="sle-acr-radio h-4 w-4 mr-2">Lupus Kutan Akut (6)</label></div></div><div class="p-2 bg-gray-50 rounded-md"><label class="font-bold block">Serosa</label><div class="pl-2"><label><input type="radio" name="sle-serosa" data-score="5" class="sle-acr-radio h-4 w-4 mr-2">Efusi Pleural/Perikardial (5)</label><br><label><input type="radio" name="sle-serosa" data-score="6" class="sle-acr-radio h-4 w-4 mr-2">Perikarditis Akut (6)</label></div></div><div class="p-2 bg-gray-50 rounded-md"><label class="font-bold block">Renal</label><div class="pl-2"><label><input type="radio" name="sle-renal" data-score="4" class="sle-acr-radio h-4 w-4 mr-2">Proteinuria >0.5g/24 jam (4)</label><br><label><input type="radio" name="sle-renal" data-score="8" class="sle-acr-radio h-4 w-4 mr-2">Nefritis Lupus Kelas II/V (8)</label><br><label><input type="radio" name="sle-renal" data-score="10" class="sle-acr-radio h-4 w-4 mr-2">Nefritis Lupus Kelas III/IV (10)</label></div></div><div class="p-2 bg-gray-50 rounded-md"><label class="font-bold block">Antibodi Antifosfolipid</label><div class="pl-2"><label><input type="checkbox" data-score="2" class="sle-acr-item h-4 w-4 mr-2">aCL/anti-β2GP1/LA positif (2)</label></div></div><div class="p-2 bg-gray-50 rounded-md"><label class="font-bold block">Protein Komplemen</label><div class="pl-2"><label><input type="radio" name="sle-complement" data-score="3" class="sle-acr-radio h-4 w-4 mr-2">C3 rendah ATAU C4 rendah (3)</label><br><label><input type="radio" name="sle-complement" data-score="4" class="sle-acr-radio h-4 w-4 mr-2">C3 rendah DAN C4 rendah (4)</label></div></div><div class="p-2 bg-gray-50 rounded-md"><label class="font-bold block">Antibodi Spesifik</label><div class="pl-2"><label><input type="checkbox" data-score="6" class="sle-acr-item h-4 w-4 mr-2">Anti-dsDNA ATAU Anti-Smith (6)</label></div></div></div><button id="calculate-sle-acr" class="w-full mt-6 bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">Hitung Skor</button><div id="sle-acr-result" class="result-box hidden"></div></div><div class="reference"><i>Referensi: Buku Saku Reumatologi IRA 2020, Kriteria ACR/EULAR 2019</i></div></div><div class="calculator-card"><div class="calculator-card-content"><h3 class="text-xl font-bold text-gray-800 mb-1">Skor Aktivitas Penyakit (MEX-SLEDAI)</h3><p class="text-gray-500 mb-4">Pilih kriteria yang sesuai untuk menilai aktivitas penyakit.</p><div class="space-y-2 h-[450px] overflow-y-auto checklist-scroll pr-2"><div class="p-2 bg-gray-50 rounded-md"><label class="font-bold block">Gangguan Neurologi (Skor 8)</label><div class="pl-2"><label><input type="radio" name="sledai-neuro" data-score="8" class="sledai-item"> Psikosis</label><br><label><input type="radio" name="sledai-neuro" data-score="8" class="sledai-item"> CVA (Stroke)</label><br><label><input type="radio" name="sledai-neuro" data-score="8" class="sledai-item"> Kejang</label><br><label><input type="radio" name="sledai-neuro" data-score="8" class="sledai-item"> Sindrom Otak Organik</label><br><label><input type="radio" name="sledai-neuro" data-score="8" class="sledai-item"> Mononeuritis</label><br><label><input type="radio" name="sledai-neuro" data-score="8" class="sledai-item"> Mielitis</label></div></div><div class="p-2 bg-gray-50 rounded-md"><label class="font-bold block">Gangguan Renal (Skor 6)</label><div class="pl-2"><label><input type="radio" name="sledai-renal" data-score="6" class="sledai-item"> Silinder</label><br><label><input type="radio" name="sledai-renal" data-score="6" class="sledai-item"> Hematuria</label><br><label><input type="radio" name="sledai-renal" data-score="6" class="sledai-item"> Proteinuria</label><br><label><input type="radio" name="sledai-renal" data-score="6" class="sledai-item"> Peningkatan Kreatinin</label></div></div><div class="p-2 bg-gray-50 rounded-md"><label><input type="checkbox" data-score="4" class="sledai-item h-4 w-4 mr-2"> Vaskulitis (4)</label></div><div class="p-2 bg-gray-50 rounded-md"><label><input type="checkbox" data-score="3" class="sledai-item h-4 w-4 mr-2"> Hemolisis (3)</label></div><div class="p-2 bg-gray-50 rounded-md"><label><input type="checkbox" data-score="3" class="sledai-item h-4 w-4 mr-2"> Trombositopenia (3)</label></div><div class="p-2 bg-gray-50 rounded-md"><label><input type="checkbox" data-score="3" class="sledai-item h-4 w-4 mr-2"> Miositis (3)</label></div><div class="p-2 bg-gray-50 rounded-md"><label><input type="checkbox" data-score="2" class="sledai-item h-4 w-4 mr-2"> Artritis (2)</label></div><div class="p-2 bg-gray-50 rounded-md"><label class="font-bold block">Gangguan Mukokutan (Skor 2)</label><div class="pl-2"><label><input type="radio" name="sledai-skin" data-score="2" class="sledai-item"> Ruam Malar</label><br><label><input type="radio" name="sledai-skin" data-score="2" class="sledai-item"> Ulkus Mukosa</label><br><label><input type="radio" name="sledai-skin" data-score="2" class="sledai-item"> Alopesia</label></div></div><div class="p-2 bg-gray-50 rounded-md"><label class="font-bold block">Serositis (Skor 2)</label><div class="pl-2"><label><input type="radio" name="sledai-serositis" data-score="2" class="sledai-item"> Pleuritis</label><br><label><input type="radio" name="sledai-serositis" data-score="2" class="sledai-item"> Perikarditis</label><br><label><input type="radio" name="sledai-serositis" data-score="2" class="sledai-item"> Peritonitis</label></div></div><div class="p-2 bg-gray-50 rounded-md"><label><input type="checkbox" data-score="1" class="sledai-item h-4 w-4 mr-2"> Demam (1)</label></div><div class="p-2 bg-gray-50 rounded-md"><label><input type="checkbox" data-score="1" class="sledai-item h-4 w-4 mr-2"> Kelelahan (1)</label></div><div class="p-2 bg-gray-50 rounded-md"><label><input type="checkbox" data-score="1" class="sledai-item h-4 w-4 mr-2"> Leukopenia (1)</label></div><div class="p-2 bg-gray-50 rounded-md"><label><input type="checkbox" data-score="1" class="sledai-item h-4 w-4 mr-2"> Limfopenia (1)</label></div></div><button id="calculate-sledai" class="w-full mt-6 bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600">Hitung Skor</button><div id="sledai-result" class="result-box hidden"></div></div><div class="reference"><i>Referensi: Buku Saku Reumatologi IRA 2020</i></div></div></div><div class="mt-8 space-y-4"><div class="bg-white rounded-lg shadow-sm border border-gray-200"><button id="toggle-acr-defs" class="w-full flex justify-between items-center text-left p-4 font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none"><span>Definisi Kriteria Diagnosis ACR/EULAR 2019</span><i class="fas fa-chevron-down transition-transform duration-300"></i></button><div id="content-acr-defs" class="hidden p-4 border-t border-gray-200 text-sm text-gray-600 space-y-2"><p><strong>Demam:</strong> Temperatur >38,3°C.</p><p><strong>Leukopenia:</strong> Hitung sel darah putih &lt;4000/mm³.</p><p><strong>Trombositopenia:</strong> Jumlah trombosit &lt;100.000/mm³.</p><p><strong>Hemolisis Autoimun:</strong> Bukti hemolisis (retikulositosis, haptoglobin rendah, bilirubin indirek meningkat) dan tes Coomb direk positif.</p><p><strong>Delirium:</strong> Perubahan kesadaran, berkurangnya fokus, gejala berkembang cepat dan berfluktuasi, disertai perubahan fungsi kognitif atau perilaku.</p><p><strong>Psikosis:</strong> Delusi dan/atau halusinasi tanpa disertai insight, dan tidak terdapat delirium.</p><p><strong>Kejang:</strong> Kejang umum primer atau kejang parsial/fokal.</p><p><strong>Non-scarring Alopecia:</strong> Kerontokan rambut tanpa jaringan parut yang ditemukan oleh dokter.</p><p><strong>Ulkus Oral:</strong> Ulkus oral yang ditemukan oleh dokter.</p><p><strong>Lupus Kutan Akut/Subakut/Diskoid:</strong> Ruam malar, ruam makulopapular, erupsi anular atau papuloskuamosa, atau lesi eritematosus-violaceous dengan atrofi dan dispigmentasi.</p><p><strong>Efusi Pleura/Perikardial:</strong> Terbukti melalui USG, X-ray, CT scan, atau MRI.</p><p><strong>Perikarditis Akut:</strong> ≥2 dari: nyeri dada perikardium, pericardial rub, gambaran EKG khas, atau efusi perikardium baru/memburuk.</p><p><strong>Keterlibatan Sendi:</strong> Sinovitis (bengkak/efusi) pada ≥2 sendi ATAU nyeri tekan pada ≥2 sendi disertai kaku pagi ≥30 menit.</p><p><strong>Proteinuria:</strong> >0,5 g/24 jam.</p><p><strong>Biopsi Ginjal:</strong> Sesuai klasifikasi ISN/RPS 2003 untuk Nefritis Lupus kelas II, III, IV, atau V.</p><p><strong>Antibodi Antifosfolipid:</strong> Anti-kardiolipin, anti-β2GP1, atau Lupus Antikoagulan positif.</p><p><strong>Komplemen Rendah:</strong> C3 atau C4, atau keduanya, di bawah batas normal.</p><p><strong>Antibodi Spesifik:</strong> Anti-dsDNA atau Anti-Smith positif.</p></div></div><div class="bg-white rounded-lg shadow-sm border border-gray-200"><button id="toggle-mex-defs" class="w-full flex justify-between items-center text-left p-4 font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none"><span>Penjelasan Poin-Poin MEX-SLEDAI</span><i class="fas fa-chevron-down transition-transform duration-300"></i></button><div id="content-mex-defs" class="hidden p-4 border-t border-gray-200 text-sm text-gray-600 space-y-2"><p><strong>Gangguan Neurologi:</strong> Mencakup Psikosis, CVA (Stroke), Kejang, Sindrom Otak Organik, Mononeuritis, atau Mielitis. Onset baru dan eksklusi penyebab lain (metabolik, infeksi, obat).</p><p><strong>Gangguan Renal:</strong> Adanya Silinder (heme granular/eritrosit), Hematuria (>5 eritrosit/LPB), Proteinuria (>0,5 g/L), atau Peningkatan Kreatinin (>5 mg/dL).</p><p><strong>Vaskulitis:</strong> Ulserasi, gangren, nodul lunak, infark periungual. Dibuktikan dengan biopsi atau angiogram.</p><p><strong>Hemolisis:</strong> Hb &lt;12 g/dL dengan retikulosit terkoreksi >3%.</p><p><strong>Trombositopenia:</strong> Trombosit &lt;100.000/mm³ (bukan karena obat).</p><p><strong>Miositis:</strong> Nyeri dan kelemahan otot proksimal dengan peningkatan CPK.</p><p><strong>Artritis:</strong> Nyeri pada >2 sendi disertai bengkak atau efusi.</p><p><strong>Gangguan Mukokutan:</strong> Ruam malar, ulkus mukosa, atau alopesia (rambut rontok abnormal/mudah tercabut). Onset baru atau berulang.</p><p><strong>Serositis:</strong> Pleuritis (nyeri/rub/efusi), Perikarditis (nyeri/rub), atau Peritonitis (nyeri abdomen difus dengan nyeri lepas).</p><p><strong>Demam:</strong> >38°C setelah eksklusi penyebab infeksi.</p><p><strong>Kelelahan:</strong> Kelelahan yang tidak dapat dijelaskan.</p><p><strong>Leukopenia/Limfopenia:</strong> Leukosit &lt;4.000/mm³ atau Limfosit &lt;1.200/mm³ (bukan karena obat).</p></div></div></div></div>
+                </div>
+
+                <div id="psa-page" class="content-page hidden">
+                     <div class="space-y-8"><div class="grid grid-cols-1 lg:grid-cols-2 gap-8"><div class="calculator-card"><div class="calculator-card-content"><h3 class="text-xl font-bold text-gray-800 mb-1">Kriteria Diagnosis (CASPAR)</h3><p class="text-gray-500 mb-4">Prasyarat: penyakit sendi inflamasi. Skor ≥3 mengklasifikasikan sebagai PsA.</p><div class="space-y-3"><div class="flex items-center"><input type="checkbox" data-score="2" class="psa-caspar-item h-4 w-4 mr-2">Psoriasis saat ini (Skor 2)</div><div class="flex items-center"><input type="checkbox" data-score="1" class="psa-caspar-item h-4 w-4 mr-2">Riwayat Psoriasis pribadi/keluarga (Skor 1)</div><div class="flex items-center"><input type="checkbox" data-score="1" class="psa-caspar-item h-4 w-4 mr-2">Lesi kuku psoriatik</div><div class="flex items-center"><input type="checkbox" data-score="1" class="psa-caspar-item h-4 w-4 mr-2">Faktor Reumatoid (RF) negatif</div><div class="flex items-center"><input type="checkbox" data-score="1" class="psa-caspar-item h-4 w-4 mr-2">Daktilitis (saat ini atau riwayat)</div><div class="flex items-center"><input type="checkbox" data-score="1" class="psa-caspar-item h-4 w-4 mr-2">Bukti radiologis formasi tulang baru</div></div><button id="calculate-psa-caspar" class="w-full mt-6 bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600">Hitung Skor</button><div id="psa-caspar-result" class="result-box hidden"></div></div><div class="reference"><i>Referensi: Kriteria CASPAR 2006</i></div></div><div class="calculator-card"><div class="calculator-card-content"><h3 class="text-xl font-bold text-gray-800 mb-1">Skor Aktivitas Penyakit (DAPSA)</h3><p class="text-gray-500 mb-4">Penilaian aktivitas penyakit pada Artritis Psoriatik.</p><div class="space-y-3"><div><label class="font-medium">Jml Sendi Nyeri (TJC68)</label><input type="number" id="psa-tjc" class="w-full mt-1 p-2 border rounded-md" placeholder="0-68"></div><div><label class="font-medium">Jml Sendi Bengkak (SJC66)</label><input type="number" id="psa-sjc" class="w-full mt-1 p-2 border rounded-md" placeholder="0-66"></div><div><label class="font-medium">CRP (mg/dL)</label><input type="number" id="psa-crp" class="w-full mt-1 p-2 border rounded-md" placeholder="e.g., 1.5"></div><div><label class="font-medium">Penilaian Global Pasien (0-10 cm)</label><input type="number" id="psa-pga" class="w-full mt-1 p-2 border rounded-md" placeholder="0-10"></div><div><label class="font-medium">Nyeri Pasien (0-10 cm)</label><input type="number" id="psa-pain" class="w-full mt-1 p-2 border rounded-md" placeholder="0-10"></div></div><button id="calculate-psa-dapsa" class="w-full mt-6 bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600">Hitung Skor</button><div id="psa-dapsa-result" class="result-box hidden"></div></div><div class="reference"><i>Referensi: Formula DAPSA standar</i></div></div></div></div>
+                </div>
+                
+                 <div id="as-page" class="content-page hidden">
+                    <div class="space-y-8"><div class="grid grid-cols-1 lg:grid-cols-2 gap-8"><div class="calculator-card"><div class="calculator-card-content"><h3 class="text-xl font-bold text-gray-800 mb-1">Kriteria Diagnosis (ASAS)</h3><p class="text-gray-500 mb-4">Untuk pasien dengan nyeri punggung ≥3 bulan, onset &lt;45 tahun.</p><div class="space-y-3"><label class="font-bold block">Pilar Utama</label><div class="flex items-center"><input type="checkbox" id="as-sacroiliitis" class="h-4 w-4 mr-2">Sakroilitis pada pencitraan</div><div class="flex items-center"><input type="checkbox" id="as-hla-b27" class="h-4 w-4 mr-2">HLA-B27 positif</div><label class="font-bold block pt-2">Fitur SpA (cek semua yang sesuai)</label><div class="h-40 overflow-y-auto checklist-scroll pr-2"><div class="flex items-center"><input type="checkbox" class="as-feature h-4 w-4 mr-2">Nyeri punggung inflamasi</div><div class="flex items-center"><input type="checkbox" class="as-feature h-4 w-4 mr-2">Artritis</div><div class="flex items-center"><input type="checkbox" class="as-feature h-4 w-4 mr-2">Entesitis</div><div class="flex items-center"><input type="checkbox" class="as-feature h-4 w-4 mr-2">Uveitis</div><div class="flex items-center"><input type="checkbox" class="as-feature h-4 w-4 mr-2">Daktilitis</div><div class="flex items-center"><input type="checkbox" class="as-feature h-4 w-4 mr-2">Psoriasis</div><div class="flex items-center"><input type="checkbox" class="as-feature h-4 w-4 mr-2">Penyakit Crohn/Kolitis</div><div class="flex items-center"><input type="checkbox" class="as-feature h-4 w-4 mr-2">Respon baik terhadap NSAID</div><div class="flex items-center"><input type="checkbox" class="as-feature h-4 w-4 mr-2">Riwayat keluarga SpA</div><div class="flex items-center"><input type="checkbox" class="as-feature h-4 w-4 mr-2">Peningkatan CRP</div></div></div><button id="calculate-as-asas" class="w-full mt-6 bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600">Cek Kriteria</button><div id="as-asas-result" class="result-box hidden"></div></div><div class="reference"><i>Referensi: Kriteria ASAS 2009</i></div></div><div class="calculator-card"><div class="calculator-card-content"><h3 class="text-xl font-bold text-gray-800 mb-1">Skor Aktivitas Penyakit (BASDAI)</h3><p class="text-gray-500 mb-4">Isi 6 skala analog visual (0-10) untuk 7 hari terakhir.</p><div class="space-y-3"><div><label>1. Tingkat kelelahan/lesu secara keseluruhan?</label><input type="number" id="as-q1" class="as-basdai-item w-full mt-1 p-2 border rounded-md" min="0" max="10" placeholder="0-10"></div><div><label>2. Tingkat nyeri leher, punggung, atau panggul?</label><input type="number" id="as-q2" class="as-basdai-item w-full mt-1 p-2 border rounded-md" min="0" max="10" placeholder="0-10"></div><div><label>3. Tingkat nyeri/bengkak sendi selain leher, punggung, panggul?</label><input type="number" id="as-q3" class="as-basdai-item w-full mt-1 p-2 border rounded-md" min="0" max="10" placeholder="0-10"></div><div><label>4. Tingkat ketidaknyamanan dari area yang nyeri saat disentuh/ditekan?</label><input type="number" id="as-q4" class="as-basdai-item w-full mt-1 p-2 border rounded-md" min="0" max="10" placeholder="0-10"></div><div><label>5. Tingkat kekakuan sendi di pagi hari?</label><input type="number" id="as-q5" class="as-basdai-item w-full mt-1 p-2 border rounded-md" min="0" max="10" placeholder="0-10"></div><div><label>6. Berapa lama kekakuan sendi berlangsung di pagi hari?</label><input type="number" id="as-q6" class="as-basdai-item w-full mt-1 p-2 border rounded-md" min="0" max="10" placeholder="0-10"></div></div><button id="calculate-as-basdai" class="w-full mt-6 bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600">Hitung Skor</button><div id="as-basdai-result" class="result-box hidden"></div></div><div class="reference"><i>Referensi: Formula BASDAI standar</i></div></div></div></div>
+                 </div>
+
+                 <div id="ssc-page" class="content-page hidden">
+                    <div class="space-y-8"><div class="grid grid-cols-1 lg:grid-cols-2 gap-8"><div class="calculator-card"><div class="calculator-card-content"><h3 class="text-xl font-bold text-gray-800 mb-1">Kriteria Diagnosis (ACR/EULAR 2013)</h3><p class="text-gray-500 mb-4">Skor ≥9 mengklasifikasikan sebagai Sklerosis Sistemik definit.</p><div class="space-y-2 h-[500px] overflow-y-auto checklist-scroll pr-2"><div class="p-2 bg-gray-100 rounded-md"><label><input type="checkbox" data-score="9" class="ssc-acr-item h-4 w-4 mr-2">Penebalan kulit jari kedua tangan memanjang proksimal dari sendi MCP (skor 9 - Kriteria Cukup)</label></div><div class="pt-2"><label class="font-bold">Penebalan kulit jari (pilih salah satu jika ada)</label></div><div><label><input type="radio" name="ssc-fingers" data-score="2" class="ssc-acr-item-radio h-4 w-4 mr-2">Jari bengkak (puffy fingers) (skor 2)</label></div><div><label><input type="radio" name="ssc-fingers" data-score="4" class="ssc-acr-item-radio h-4 w-4 mr-2">Sklerodaktili (skor 4)</label></div><div class="pt-2"><label class="font-bold">Lesi ujung jari (pilih salah satu jika ada)</label></div><div><label><input type="radio" name="ssc-lesions" data-score="2" class="ssc-acr-item-radio h-4 w-4 mr-2">Ulkus digital (skor 2)</label></div><div><label><input type="radio" name="ssc-lesions" data-score="3" class="ssc-acr-item-radio h-4 w-4 mr-2">Bekas luka pitting di ujung jari (skor 3)</label></div><div class="pt-2"><label class="font-bold">Lainnya</label></div><div><label><input type="checkbox" data-score="2" class="ssc-acr-item h-4 w-4 mr-2">Telangiektasia (skor 2)</label></div><div><label><input type="checkbox" data-score="2" class="ssc-acr-item h-4 w-4 mr-2">Kapiler lipatan kuku abnormal (skor 2)</label></div><div><label><input type="checkbox" data-score="2" class="ssc-acr-item h-4 w-4 mr-2">Hipertensi Arteri Pulmonal dan/atau Penyakit Paru Interstisial (skor 2)</label></div><div><label><input type="checkbox" data-score="3" class="ssc-acr-item h-4 w-4 mr-2">Fenomena Raynaud (skor 3)</label></div><div><label><input type="checkbox" data-score="3" class="ssc-acr-item h-4 w-4 mr-2">Autoantibodi terkait SSc (ACA, Scl-70, RNA pol III) (skor 3)</label></div></div><button id="calculate-ssc-acr" class="w-full mt-6 bg-sky-500 text-white py-2 rounded-lg hover:bg-sky-600">Hitung Skor</button><div id="ssc-acr-result" class="result-box hidden"></div></div><div class="reference"><i>Referensi: Buku Saku Reumatologi IRA 2020, Kriteria ACR/EULAR 2013</i></div></div><div class="calculator-card"><div class="calculator-card-content"><h3 class="text-xl font-bold text-gray-800 mb-1">Aktivitas Penyakit (mRSS)</h3><p class="text-gray-500 mb-4">Masukkan skor kulit Rodnan yang dimodifikasi (mRSS) untuk interpretasi.</p><img src="https://www.researchgate.net/publication/318469246/figure/fig1/AS:962699093614642@1606536758872/Modified-Rodnan-skin-score-mRSS-of-17-different-anatomical-areas.gif" alt="mRSS Scoring Diagram" class="w-full rounded-md mb-4"><div><label class="font-medium">Skor mRSS (0-51)</label><input type="number" id="ssc-mrss" class="w-full mt-1 p-2 border rounded-md" min="0" max="51" placeholder="0-51"></div><button id="interpret-ssc-mrss" class="w-full mt-6 bg-sky-500 text-white py-2 rounded-lg hover:bg-sky-600">Interpretasi</button><div id="ssc-mrss-result" class="result-box hidden"></div></div><div class="reference"><i>Referensi: Modified Rodnan Skin Score</i></div></div></div></div>
+                 </div>
+
+                 <div id="gout-page" class="content-page hidden">
+                    <div class="space-y-8"><div class="grid grid-cols-1 lg:grid-cols-2 gap-8"><div class="calculator-card"><div class="calculator-card-content"><h3 class="text-xl font-bold text-gray-800 mb-1">Kriteria Diagnosis (ACR/EULAR 2015)</h3><p class="text-gray-500 mb-4">Prasyarat: ≥1 episode nyeri sendi perifer. Skor ≥8 mengklasifikasikan sebagai Gout.</p><div class="space-y-3 h-[500px] overflow-y-auto checklist-scroll pr-2"><div><label class="font-medium">Pola Keterlibatan Sendi</label><select id="gout-joint" class="gout-acr-item w-full mt-1 p-2 border rounded-md"><option value="0">Lainnya</option><option value="1">Pergelangan kaki atau Kaki tengah</option><option value="2">Sendi Metatarsophalangeal pertama (MTP 1)</option></select></div><div><label class="font-medium">Karakteristik Episode (pilih yang paling khas)</label><select id="gout-char" class="gout-acr-item w-full mt-1 p-2 border rounded-md"><option value="0">Tidak ada</option><option value="1">Kemerahan</option><option value="2">Tidak bisa disentuh/diberi tekanan</option><option value="3">Sangat sulit berjalan</option></select></div><div><label class="font-medium">Perjalanan Waktu Episode</label><select id="gout-time" class="gout-acr-item w-full mt-1 p-2 border rounded-md"><option value="0">Tidak ada</option><option value="1">Puncak nyeri &lt;24 jam &amp; Resolusi ≤14 hari &amp; Resolusi lengkap antar episode</option><option value="2">Episode tipikal rekuren</option></select></div><div class="pt-2 flex items-center"><input type="checkbox" id="gout-tophus" data-score="4" class="gout-acr-check h-4 w-4 mr-2">Tofus klinis (skor 4)</div><div class="pt-2"><label class="font-medium">Kadar Asam Urat Serum</label><select id="gout-urate" class="gout-acr-item w-full mt-1 p-2 border rounded-md"><option value="-4">&lt;4 mg/dL</option><option value="0">4 - &lt;6 mg/dL</option><option value="2">6 - &lt;8 mg/dL</option><option value="3">8 - &lt;10 mg/dL</option><option value="4">≥10 mg/dL</option></select></div><div class="pt-2 flex items-center"><input type="checkbox" id="gout-imaging" data-score="4" class="gout-acr-check h-4 w-4 mr-2">Bukti pencitraan deposisi urat (skor 4)</div></div><button id="calculate-gout-acr" class="w-full mt-6 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Hitung Skor</button><div id="gout-acr-result" class="result-box hidden"></div></div><div class="reference"><i>Referensi: Buku Saku Reumatologi IRA 2020, Kriteria ACR/EULAR 2015</i></div></div><div class="calculator-card"><div class="calculator-card-content"><h3 class="text-xl font-bold text-gray-800 mb-1">Penilaian Serangan Gout</h3><p class="text-gray-500 mb-4">Catat parameter serangan Gout saat ini untuk pemantauan.</p><div class="space-y-3"><div><label class="font-medium">Tingkat Nyeri Pasien (0-10)</label><input type="number" id="gout-pain" class="w-full mt-1 p-2 border rounded-md" min="0" max="10" placeholder="0-10"></div><div><label class="font-medium">Jumlah Sendi Aktif (Bengkak/Nyeri)</label><input type="number" id="gout-active-joints" class="w-full mt-1 p-2 border rounded-md" min="0" placeholder="e.g., 2"></div><div><label class="font-medium">Penilaian Global Pasien (0-10)</label><input type="number" id="gout-pga" class="w-full mt-1 p-2 border rounded-md" min="0" max="10" placeholder="0-10"></div></div><button id="assess-gout-flare" class="w-full mt-6 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Buat Ringkasan</button><div id="gout-flare-result" class="result-box hidden"></div></div><div class="reference"><i>Alat bantu pemantauan klinis</i></div></div></div></div>
+                 </div>
+
+                <div id="references-page" class="content-page hidden">
+                    <div class="calculator-card max-w-3xl mx-auto">
+                        <h2 class="text-2xl font-bold mb-6">Daftar Referensi</h2>
+                        <ul class="list-disc pl-5 space-y-3 text-gray-700">
+                            <li><strong>Buku Saku Reumatologi (2020)</strong><br>Perhimpunan Reumatologi Indonesia (IRA). Sumber utama untuk alur diagnosis, kriteria penyakit, dan tatalaksana yang diadaptasi untuk kondisi di Indonesia.</li>
+                            <li><strong>Kriteria Klasifikasi Gout ACR/EULAR (2015)</strong><br>Neogi T, et al. <i>2015 Gout classification criteria.</i> Arthritis Rheumatol. 2015;67(10):2557–68.</li>
+                            <li><strong>Kriteria Klasifikasi Artritis Reumatoid ACR/EULAR (2010)</strong><br>Aletaha D, et al. <i>2010 Rheumatoid Arthritis Classification Criteria.</i> Arthritis Rheum. 2010;62(9):2569–81.</li>
+                            <li><strong>Kriteria Klasifikasi SLE ACR/EULAR (2019)</strong><br>Aringer M, et al. <i>2019 EULAR/ACR classification criteria for SLE.</i> Arthritis Rheumatol. 2019;71(9):1400–12.</li>
+                            <li><strong>Kriteria Klasifikasi Spondiloartritis Aksial ASAS (2009)</strong><br>Rudwaleit M, et al. <i>The development of ASAS classification criteria for axial spondyloarthritis.</i> Ann Rheum Dis. 2009;68(6):770–6.</li>
+                            <li><strong>Kriteria Klasifikasi Artritis Psoriatik (CASPAR) (2006)</strong><br>Taylor W, et al. <i>Classification criteria for psoriatic arthritis.</i> Arthritis Rheum. 2006;54(8):2665–73.</li>
+                            <li><strong>Kriteria Klasifikasi Sklerosis Sistemik ACR/EULAR (2013)</strong><br>Hoogen F Van Den, et al. <i>2013 Classification Criteria for Systemic Sclerosis.</i> Arthritis Rheum. 2013;65(11):2737–47.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+        
+        <footer class="text-center py-4 bg-white border-t border-gray-100 text-gray-500 text-sm">
+            &copy; <span id="footer-year"></span> - IWP I Rheumatools
+        </footer>
+    </div>
+
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-20 hidden md:hidden"></div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.getElementById('menu-btn');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const mainTitle = document.getElementById('main-title');
+        const contentPages = document.querySelectorAll('.content-page');
+
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                mainTitle.textContent = link.querySelector('span').textContent;
+                const targetPageId = link.dataset.page + '-page';
+                contentPages.forEach(page => { page.classList.add('hidden'); });
+                const targetPage = document.getElementById(targetPageId);
+                if (targetPage) { targetPage.classList.remove('hidden'); }
+                if (window.innerWidth < 768) { 
+                    sidebar.classList.add('-translate-x-full'); 
+                    sidebarOverlay.classList.add('hidden'); 
+                }
+            });
+        });
+
+        menuBtn.addEventListener('click', () => { sidebar.classList.toggle('-translate-x-full'); sidebarOverlay.classList.toggle('hidden'); });
+        sidebarOverlay.addEventListener('click', () => { sidebar.classList.add('-translate-x-full'); sidebarOverlay.classList.add('hidden'); });
+        
+        function showResult(element, text, colorClass) {
+            if (element) {
+                element.innerHTML = text;
+                element.className = 'result-box';
+                element.classList.add(colorClass, 'text-black');
+            }
+        }
+
+        function attachCalculatorListeners(pageId, calculateFn) {
+            const page = document.getElementById(pageId);
+            if(page) calculateFn(page);
+        }
+
+        // --- Diagnostic Approach ---
+        attachCalculatorListeners('diag-approach-page', (page) => {
+            const stepsContainer = page.querySelector('#diag-steps-container');
+            const resultContainer = page.querySelector('#diag-result-container');
+            const resultBox = page.querySelector('#diag-result-box');
+            page.querySelectorAll('.diag-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const nextStepId = button.dataset.nextStep;
+                    const resultText = button.dataset.result;
+                    button.closest('.text-center').classList.add('hidden');
+                    if (nextStepId) { stepsContainer.querySelector('#' + nextStepId).classList.remove('hidden'); } 
+                    else if (resultText) {
+                        stepsContainer.classList.add('hidden');
+                        resultContainer.classList.remove('hidden');
+                        resultBox.innerHTML = resultText.split(', ').join('<br>');
+                    }
+                });
+            });
+            page.querySelector('#reset-diag-btn').addEventListener('click', () => {
+                resultContainer.classList.add('hidden');
+                stepsContainer.classList.remove('hidden');
+                stepsContainer.querySelectorAll('div[id^="step-"]').forEach(step => step.classList.add('hidden'));
+                stepsContainer.querySelector('#step-trauma').classList.remove('hidden');
+            });
+            page.querySelector('#toggle-definitions').addEventListener('click', (e) => {
+                page.querySelector('#definitions-content').classList.toggle('hidden');
+                e.currentTarget.querySelector('i').classList.toggle('fa-chevron-down');
+                e.currentTarget.querySelector('i').classList.toggle('fa-chevron-up');
+            });
+        });
+
+        // --- RA ---
+        attachCalculatorListeners('ra-page', (page) => {
+            page.querySelector('#calculate-ra-acr').addEventListener('click', () => {
+                let score = parseInt(page.querySelector('#ra-joint').value) + parseInt(page.querySelector('#ra-serology').value) + parseInt(page.querySelector('#ra-apr').value) + parseInt(page.querySelector('#ra-duration').value);
+                showResult(page.querySelector('#ra-acr-result'), `Skor Total: ${score}.<br>${score >= 6 ? 'Memenuhi kriteria RA.' : 'Tidak memenuhi kriteria RA.'}`, score >= 6 ? 'bg-green-100' : 'bg-yellow-100');
+            });
+            page.querySelector('#calculate-ra-das28').addEventListener('click', () => {
+                const tjc=parseFloat(page.querySelector('#ra-tjc').value)||0, sjc=parseFloat(page.querySelector('#ra-sjc').value)||0, crp=parseFloat(page.querySelector('#ra-crp').value)||0, pga=parseFloat(page.querySelector('#ra-pga').value)||0;
+                let score = 0; if(crp > 0) score = (0.56*Math.sqrt(tjc))+(0.28*Math.sqrt(sjc))+(0.36*Math.log(crp+1))+(0.014*pga)+0.96;
+                let interpretation, colorClass;
+                if (score > 5.1) { interpretation = 'Aktivitas Penyakit Tinggi'; colorClass = 'bg-red-200'; }
+                else if (score > 3.2) { interpretation = 'Aktivitas Penyakit Sedang'; colorClass = 'bg-yellow-200'; }
+                else if (score >= 2.6) { interpretation = 'Aktivitas Penyakit Rendah'; colorClass = 'bg-blue-200'; }
+                else { interpretation = 'Remisi'; colorClass = 'bg-green-200'; }
+                showResult(page.querySelector('#ra-das28-result'), `Skor DAS28-CRP: ${score.toFixed(2)}<br>${interpretation}`, colorClass);
+            });
+        });
+
+        // --- SLE ---
+        attachCalculatorListeners('sle-page', (page) => {
+            page.querySelector('#calculate-sle-acr').addEventListener('click', () => {
+                let score = 0;
+                page.querySelectorAll('.sle-acr-item:checked').forEach(item => score += parseInt(item.dataset.score));
+                page.querySelectorAll('.sle-acr-radio:checked').forEach(item => score += parseInt(item.dataset.score));
+                showResult(page.querySelector('#sle-acr-result'),`Skor Total: ${score}.<br>${score >= 10 ? 'Memenuhi kriteria SLE.' : 'Tidak memenuhi kriteria SLE.'}`, score >= 10 ? 'bg-green-100' : 'bg-yellow-100');
+            });
+            page.querySelector('#calculate-sledai').addEventListener('click', () => {
+                let score = 0; page.querySelectorAll('.sledai-item:checked').forEach(item => score += parseInt(item.dataset.score));
+                let interpretation, colorClass;
+                if(score >= 10) { interpretation = 'Aktivitas Berat'; colorClass = 'bg-red-200'; }
+                else if (score >= 6) { interpretation = 'Aktivitas Sedang'; colorClass = 'bg-yellow-200'; }
+                else if (score >= 2) { interpretation = 'Aktivitas Ringan'; colorClass = 'bg-blue-200'; }
+                else { interpretation = 'Remisi'; colorClass = 'bg-green-200'; }
+                showResult(page.querySelector('#sledai-result'), `Skor MEX-SLEDAI: ${score}<br>${interpretation}`, colorClass);
+            });
+             page.querySelector('#toggle-acr-defs').addEventListener('click', (e) => {
+                page.querySelector('#content-acr-defs').classList.toggle('hidden');
+                e.currentTarget.querySelector('i').classList.toggle('fa-chevron-down');
+                e.currentTarget.querySelector('i').classList.toggle('fa-chevron-up');
+            });
+            page.querySelector('#toggle-mex-defs').addEventListener('click', (e) => {
+                page.querySelector('#content-mex-defs').classList.toggle('hidden');
+                e.currentTarget.querySelector('i').classList.toggle('fa-chevron-down');
+                e.currentTarget.querySelector('i').classList.toggle('fa-chevron-up');
+            });
+        });
+        
+        // --- PsA ---
+        attachCalculatorListeners('psa-page', (page) => {
+            page.querySelector('#calculate-psa-caspar').addEventListener('click', () => {
+                let score=0;page.querySelectorAll('.psa-caspar-item:checked').forEach(item=>score+=parseInt(item.dataset.score));
+                showResult(page.querySelector('#psa-caspar-result'),`Skor Total: ${score}.<br>${score>=3?'Memenuhi kriteria PsA.':'Tidak memenuhi kriteria PsA.'}`,score>=3?'bg-green-100':'bg-yellow-100');
+            });
+            page.querySelector('#calculate-psa-dapsa').addEventListener('click', () => {
+                const tjc=parseFloat(page.querySelector('#psa-tjc').value)||0,sjc=parseFloat(page.querySelector('#psa-sjc').value)||0,crp=parseFloat(page.querySelector('#psa-crp').value)||0,pga=parseFloat(page.querySelector('#psa-pga').value)||0,pain=parseFloat(page.querySelector('#psa-pain').value)||0;
+                const score=tjc+sjc+crp+pga+pain;
+                let interpretation,colorClass;
+                if(score>28){interpretation='Aktivitas Penyakit Tinggi';colorClass='bg-red-200';}
+                else if(score>14){interpretation='Aktivitas Penyakit Sedang';colorClass='bg-yellow-200';}
+                else if(score>4){interpretation='Aktivitas Penyakit Rendah';colorClass='bg-blue-200';}
+                else{interpretation='Remisi';colorClass='bg-green-200';}
+                showResult(page.querySelector('#psa-dapsa-result'),`Skor DAPSA: ${score.toFixed(2)}<br>${interpretation}`,colorClass);
+            });
+        });
+
+        // --- AS ---
+        attachCalculatorListeners('as-page', (page) => {
+            page.querySelector('#calculate-as-asas').addEventListener('click', () => {
+                const sacroiliitis=page.querySelector('#as-sacroiliitis').checked,hlaB27=page.querySelector('#as-hla-b27').checked,featureCount=page.querySelectorAll('.as-feature:checked').length;
+                let meetsCriteria=false;if(sacroiliitis&&featureCount>=1)meetsCriteria=true;if(hlaB27&&featureCount>=2)meetsCriteria=true;
+                showResult(page.querySelector('#as-asas-result'),`Hasil: ${meetsCriteria?'Memenuhi kriteria klasifikasi SpA.':'Tidak memenuhi kriteria klasifikasi SpA.'}`,meetsCriteria?'bg-green-100':'bg-yellow-100');
+            });
+            page.querySelector('#calculate-as-basdai').addEventListener('click', () => {
+                const q1=parseFloat(page.querySelector('#as-q1').value)||0,q2=parseFloat(page.querySelector('#as-q2').value)||0,q3=parseFloat(page.querySelector('#as-q3').value)||0,q4=parseFloat(page.querySelector('#as-q4').value)||0,q5=parseFloat(page.querySelector('#as-q5').value)||0,q6=parseFloat(page.querySelector('#as-q6').value)||0;
+                const score=((q1+q2+q3+q4)+((q5+q6)/2))/5;
+                showResult(page.querySelector('#as-basdai-result'),`Skor BASDAI: ${score.toFixed(2)}<br>${score>=4?'Aktivitas penyakit aktif.':'Aktivitas penyakit tidak aktif.'}`,score>=4?'bg-yellow-200':'bg-green-200');
+            });
+        });
+        
+        // --- SSc ---
+        attachCalculatorListeners('ssc-page', (page) => {
+            page.querySelector('#calculate-ssc-acr').addEventListener('click', () => {
+                let score=0;page.querySelectorAll('.ssc-acr-item:checked').forEach(item=>score+=parseInt(item.dataset.score));page.querySelectorAll('.ssc-acr-item-radio:checked').forEach(item=>score+=parseInt(item.dataset.score));
+                showResult(page.querySelector('#ssc-acr-result'),`Skor Total: ${score}.<br>${score>=9?'Memenuhi kriteria SSc.':'Tidak memenuhi kriteria SSc.'}`,score>=9?'bg-green-100':'bg-yellow-100');
+            });
+            page.querySelector('#interpret-ssc-mrss').addEventListener('click', () => {
+                const score=parseFloat(page.querySelector('#ssc-mrss').value)||0;
+                let interpretation='Peningkatan skor menunjukkan progresi penyakit kulit.';
+                if(score==0)interpretation='Tidak ada penebalan kulit.';
+                else if(score<=14)interpretation='Penebalan kulit ringan.';
+                else if(score<=29)interpretation='Penebalan kulit sedang.';
+                else interpretation='Penebalan kulit berat.';
+                showResult(page.querySelector('#ssc-mrss-result'),`Skor mRSS: ${score}<br>${interpretation}`,'bg-blue-100');
+            });
+        });
+        
+        // --- Gout ---
+        attachCalculatorListeners('gout-page', (page) => {
+            page.querySelector('#calculate-gout-acr').addEventListener('click', () => {
+                let score=0;score+=parseInt(page.querySelector('#gout-joint').value);score+=parseInt(page.querySelector('#gout-char').value);score+=parseInt(page.querySelector('#gout-time').value);score+=parseInt(page.querySelector('#gout-urate').value);if(page.querySelector('#gout-tophus').checked)score+=4;if(page.querySelector('#gout-imaging').checked)score+=4;
+                showResult(page.querySelector('#gout-acr-result'),`Skor Total: ${score}.<br>${score>=8?'Sangat mungkin Gout.':'Gout tidak mungkin.'}`,score>=8?'bg-green-100':'bg-yellow-100');
+            });
+            page.querySelector('#assess-gout-flare').addEventListener('click', () => {
+                const pain=page.querySelector('#gout-pain').value||'N/A',joints=page.querySelector('#gout-active-joints').value||'N/A',pga=page.querySelector('#gout-pga').value||'N/A';
+                showResult(page.querySelector('#gout-flare-result'),`Ringkasan: Nyeri ${pain}/10, Jml Sendi Aktif: ${joints}, PGA: ${pga}/10`,'bg-blue-100');
+            });
+        });
+
+        // --- Initial Load ---
+        document.querySelector('.nav-link[data-page="ra"]').click();
+    });
+    </script>
+</body>
+</html>
+
